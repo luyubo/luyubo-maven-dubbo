@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luyubo.dubbo.dao.ArticleDao">
+	<!-- 查询和条件查询 -->
+	 <select id="select" resultType="Article">
+		select cms_article.*,cms_user.username from cms_article 
+		LEFT JOIN cms_user ON cms_article.user_id=cms_user.id
+		<if test="article.mintime==null and article.maxtime==null">
+			<if test="article.select==1">
+			order by created 
+		</if>
+		<if test="article.select==2">
+			order by user_id
+		</if>
+		<if test="article.select==3">
+			order by commentCnt desc
+		</if>
+		</if>
+		<where>
+			<if test="article.mintime!=null and article.mintime!=''">
+				created&gt;=#{article.mintime}
+			</if>
+			<if test="article.maxtime!=null and article.maxtime!=''">
+				and created&lt;=#{article.maxtime}
+			</if>
+		</where>
+		<if test="article.select==1">
+			order by created 
+		</if>
+		<if test="article.select==2">
+			order by user_id
+		</if>
+		<if test="article.select==3">
+			order by commentCnt desc
+		</if>	
+	</select>
+	
+	<!-- <select id="selectById" resultType="Article">
+		select article.*,article.channel_id channelId,article.user_id userId,article.category_id categoryId
+		 from cms_article article where id=#{id}
+	</select>
+	
+	<select id="getNewList" resultType="Article">
+		select article.*,article.channel_id channelId,article.user_id userId,article.category_id categoryId
+		from cms_article article
+		WHERE article.deleted=0 and article.status=1
+		order by article.created desc
+		limit ${num}
+	</select>
+	
+	<select id="selectByIds" resultType="Article">
+		select article.*,article.channel_id channelId,article.user_id userId,article.category_id categoryId
+		 from cms_article article where id in(${ids})
+	</select>
+	
+	<select id="selectByHot" resultType="Article">
+		select article.*,article.channel_id channelId,article.user_id userId,article.category_id categoryId,user.nickname
+		from cms_article article,cms_user user
+		WHERE article.user_id=user.id and article.deleted=0 and article.status=1 AND article.hot>0
+		<if test="title!=null and title!=''">
+			and article.title like '%${title}%'
+		</if>
+		order by article.hot desc 
+
+	</select>
+	
+	<select id="getListByChannelIdAndCateId" resultType="Article">
+		select article.*,article.channel_id channelId,article.user_id userId,article.category_id categoryId,user.nickname
+		from cms_article article,cms_user user
+		WHERE article.user_id=user.id and article.deleted=0 and article.status=1
+		AND article.channel_id=#{channelId}
+		<if test="cateId>0">
+			and category_id=#{cateId}
+		</if>
+		order by article.created desc
+	</select>
+	
+	<select id="getListByChannelId" resultType="Article">
+		select *
+		 from cms_article article where deleted=0 and status=1 and channel_id=#{channelId} and id!=#{articleId}
+		 limit ${num}
+	</select>
+	
+	<select id="count" resultType="int">
+		select count(1) from cms_article
+	</select>
+	
+	<insert id="insert" parameterType="com.luyubo.cms.pojo.Article">
+		insert into cms_article (title, picture, channel_id, 
+	      category_id, user_id, hits, 
+	      hot, status, deleted, 
+	      created, updated, commentCnt, 
+	      content)
+	    values (#{article.title}, #{article.picture}, #{article.channelId}, 
+	      #{article.categoryId}, #{article.userId}, #{article.hits}, 
+	      #{article.hot}, #{article.status}, #{article.deleted}, 
+	      #{article.created}, #{article.updated}, #{article.commentCnt}, 
+	      #{article.content})
+	</insert>
+	
+	<update id="update">
+		update cms_article
+	    set title = #{article.title},
+	      picture = #{article.picture},
+	      channel_id = #{article.channelId},
+	      category_id = #{article.categoryId},
+	      user_id = #{article.userId},
+	      status = #{article.status},
+	      updated = #{article.updated},
+	      commentCnt = #{article.commentCnt},
+	      content = #{article.content}
+	    where id = #{article.id}
+	</update>
+	
+	<update id="updateDeleteByIds">
+		update cms_article 
+		set 
+		deleted=1
+		where id in (${ids})
+	</update>
+	
+	<update id="updateCommentCnt">
+		update cms_article
+		set commentCnt=commentCnt+1
+		where id=#{articleId}
+	</update>
+	
+	<update id="updateTousuCnt">
+		update cms_article 
+		set tousuCnt=tousuCnt+1
+		where id=#{article.id}
+	</update>
+	
+	<update id="updateHit">
+		update cms_article
+		set hits=hits+1
+		where id=#{id}
+	</update>
+	
+	<update id="updateStatus3">
+		update cms_article
+		set status=3
+		where id=#{id}
+	</update>
+	
+	<delete id="deleteById">
+		delete from cms_article where id=#{id}
+	</delete>
+	
+	<delete id="deleteByIds">
+		delete from cms_article where id in(${ids})
+	</delete>
+	
+	<update id="updateStatus">
+		update cms_article set status=#{status} where id=#{id}
+	</update>
+	
+	<update id="addHot">
+		update cms_article set hot=hot+1 where id=#{id}
+	</update> -->
+</mapper>
